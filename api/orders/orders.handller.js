@@ -12,10 +12,10 @@ async function cadastrarOrders(order){
     //     number :  order.number,
     //     status: order.status
     // }
-
+    
     const finalOrder = await crud.save("orders", undefined, order);
+    console.log("ok handller");
     return finalOrder;
-
 }
 
 module.exports = {

@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
+const router = require("./api/route");
 const route= express.Router();
-const routes = require("./api/route");
-
-route.use(routes);
+route.use(router);
 app.use(route);
 
-app.listen("3000",() =>{
-    console.log("localhost:3000");
-});
+
+app.listen(4000, () => {
+    console.log("app listen on http://localhost: 4000")
+})
