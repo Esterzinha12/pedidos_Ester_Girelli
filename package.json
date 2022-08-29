@@ -1,0 +1,26 @@
+{
+  "dependencies": {
+    "express": "^4.18.1",
+    "firebase": "^9.9.3",
+    "nodemon": "^2.0.19"
+  },
+  "name": "pedidos_ester_girelli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Esterzinha12/pedidos_Ester_Girelli.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Esterzinha12/pedidos_Ester_Girelli/issues"
+  },
+  "homepage": "https://github.com/Esterzinha12/pedidos_Ester_Girelli#readme",
+  "description": ""
+}
