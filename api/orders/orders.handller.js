@@ -27,7 +27,7 @@ async function cadastrarOrders(order) {
     // }
 
 
-    const finalOrder = await crud.save("orders", null, order);
+    const finalOrder = await crud.save("orders", undefined, order);
     console.log("ok handller");
     return finalOrder;
 };
