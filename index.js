@@ -5,7 +5,7 @@ const route= express.Router();
 route.use(router);
 app.use(route);
 
-
-app.listen(4000, () => {
-    console.log("app listen on http://localhost: 4000")
+app.use("/api", router);
+app.listen(3000, () => {
+    console.log("app listen on http://localhost: 3000")
 })

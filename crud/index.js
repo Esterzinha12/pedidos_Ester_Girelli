@@ -32,7 +32,7 @@ async function save(Tablename, id, dado) {
         const referenceEntity = await setDoc(doc(db, Tablename, id), dado);
         const savedData = {
             ...dado,
-            id: id
+            id: referenceEntity.id
         }
         return savedData;
     } else {
