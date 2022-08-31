@@ -2,34 +2,43 @@ const crud = require("../../crud");
 const { buscarUser } = require('../users/users.handller');
 
 async function cadastrarOrders(order) {
-    console.log("ok controller"); 
-   
-    // const clientes = await buscarUser();
-    // for (let idCliente of clientes) {
-    //     if (!idUser === idCliente) {
-    //         return {
-    //             error: "0001",
-    //             message: "Não foi encontrado esse cliente!"
-    //         }
-    //     }
-    // }
-  
+
+    const clientes = await buscarUser();
+    const idUser = order.UserId;
+
+    console.log(clientes);
+
+    for (let idCliente of clientes) {
+        if (idUser === idCliente.id) {
+            if(order.status == 'aberto'){
+                return {
+                    error: "0002",
+                    message: "Não foi possivel fazer outro pedido... Outro pedido está em aberto!"
+                }
+            }else{
+                const finalOrder = await crud.save("orders", undefined, order);
+                 return finalOrder;
+            }
+           
+        }
+    }
+    return {
+        error: "0001",
+        message: "Não foi encontrado esse cliente!"
+    }
 
     // if (dados.status == "aberto") {
-    //     return {
-    //         error: "0002",
-    //         message: "Não é possivel realizar mais um pedido!"
-    //     }
+
+    //     // parte onde ira adicionar mais produtos no pedido;
     // }
+
     // const dados = {
-    //     number :  order.number,
+    //     number: order.number,
     //     status: order.status
     // }
 
 
-    const finalOrder = await crud.save("orders", undefined, order);
-    console.log("ok handller");
-    return finalOrder;
+
 };
 
 async function buscarOrders() {

@@ -5,7 +5,6 @@ const products = require("./products.handller")
 router.post("/", async (req, res) => {
     const product = req.body;
     res.json(await products.cadastrarProducts(product));
-    
 });
 
 router.get("/", async (req, res) => {

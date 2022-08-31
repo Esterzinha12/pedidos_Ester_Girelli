@@ -1,11 +1,16 @@
 const express = require("express");
-const app = express();
-const router = require("./api/route");
-const route= express.Router();
-route.use(router);
-app.use(route);
+const cors = require("cors");
+const port = 3000;
 
-app.use("/api", router);
-app.listen(3000, () => {
-    console.log("app listen on http://localhost: 3000")
+const router = express();
+
+router.use(express.json())
+router.use(cors());
+
+const routes = require("./api/route");
+
+router.use("/api", routes);
+
+router.listen(port, () => { 
+    console.log(`Servidor escutando a porta: ${port}`)
 })

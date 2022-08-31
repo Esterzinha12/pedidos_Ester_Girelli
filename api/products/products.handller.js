@@ -2,7 +2,6 @@ const crud = require("../../crud");
 
 async function cadastrarProducts(product){
     return await crud.save("products", undefined, product);
-    
 };
 
 async function buscarProducts() {
