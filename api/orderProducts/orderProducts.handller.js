@@ -28,7 +28,7 @@ async function cadastrarOrderProducts(ordersProducts) {
         }
     }
     return {
-        error: "0001",
+        error: "0003",
         message: "Não foi encontrado esse Pedido!"
     }
 
@@ -45,6 +45,8 @@ async function buscarOrderProductsId(id) {
 async function deletarOrderProducts(id) {
     return await crud.remove("orderProducts", id);
 };
+
+
 
 
 module.exports = {

@@ -1,25 +1,27 @@
 const crud = require("../../crud");
 const { buscarUser } = require('../users/users.handller');
+const { buscarOrderProducts } = require('../orderProducts/orderProducts.handller');
 
 async function cadastrarOrders(order) {
 
     const clientes = await buscarUser();
     const idUser = order.UserId;
-
-    console.log(clientes);
+    const orders = await buscarOrders();
 
     for (let idCliente of clientes) {
         if (idUser === idCliente.id) {
-            if(order.status == 'aberto'){
-                return {
-                    error: "0002",
-                    message: "Não foi possivel fazer outro pedido... Outro pedido está em aberto!"
-                }
-            }else{
-                const finalOrder = await crud.save("orders", undefined, order);
-                 return finalOrder;
+            for (let idOrders of orders) {
+                if (idUser === idOrders.UserId) {
+                    if (idOrders.Status == 'aberto') {
+                        return {
+                            error: "0002",
+                            message: "Não foi possivel fazer o pedido... Outro pedido está em aberto!"
+                        }
+                    }
+                } 
             }
-           
+            const finalOrder = await crud.save("orders", undefined, order);
+            return finalOrder;
         }
     }
     return {
@@ -27,10 +29,6 @@ async function cadastrarOrders(order) {
         message: "Não foi encontrado esse cliente!"
     }
 
-    // if (dados.status == "aberto") {
-
-    //     // parte onde ira adicionar mais produtos no pedido;
-    // }
 
     // const dados = {
     //     number: order.number,
@@ -39,6 +37,49 @@ async function cadastrarOrders(order) {
 
 
 
+};
+
+async function editarOrders(idOrder, order) {
+    const listaorders = await buscarOrders();
+    const listaOrderProducts = await buscarOrderProducts();
+
+
+    for (let idOrders of listaorders) {
+        if (idOrder === idOrders.id) {
+            for (let idOrderProducts of listaOrderProducts) {
+                if (idOrderProducts.OrderId == idOrder) {
+                    if (idOrders.Status == 'aberto') {
+                        const edit = {
+                            Number: order.Number,
+                            "UserId": order.UserId,
+                            "Status": "fechado"
+                        }
+                        const editOrder = await crud.save("orders", idOrder, edit);
+                        return editOrder;
+                    }else{
+                        return {
+                            error: "0005",
+                            message: "Esse pedido não esta aberto!"
+                        }
+                    }
+                } else {
+                    return {
+                        error: "0006",
+                        message: "Não há produtos nesse pedido!"
+                    }
+                }
+            }
+
+        }
+    }
+    return {
+        error: "0003",
+        message: "Não foi encontrado esse Pedido!"
+    }
+
+
+
+    return await crud.save("orders", id);
 };
 
 async function buscarOrders() {
@@ -54,9 +95,12 @@ async function deletarOrders(id) {
 };
 
 
+
+
 module.exports = {
     buscarOrders,
     buscarOrdersId,
     cadastrarOrders,
-    deletarOrders
+    deletarOrders,
+    editarOrders
 }

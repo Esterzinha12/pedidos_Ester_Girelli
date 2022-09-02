@@ -22,5 +22,11 @@ router.delete("/:id", async (req, res) => {
     res.json(await orders.deletarOrders(id));
 });
 
+router.put("/:id", async (req, res) => {
+    const id = req.params.id;
+    const order = req.body;
+    res.json(await orders.editarOrders(id, order));
+});
+
 
 module.exports = router;
