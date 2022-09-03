@@ -28,15 +28,6 @@ async function cadastrarOrders(order) {
         error: "0001",
         message: "Não foi encontrado esse cliente!"
     }
-
-
-    // const dados = {
-    //     number: order.number,
-    //     status: order.status
-    // }
-
-
-
 };
 
 async function editarOrders(idOrder, order) {
@@ -51,8 +42,8 @@ async function editarOrders(idOrder, order) {
                     if (idOrders.Status == 'aberto') {
                         const edit = {
                             Number: order.Number,
-                            "UserId": order.UserId,
-                            "Status": "fechado"
+                            UserId: order.UserId,
+                            Status: "fechado"
                         }
                         const editOrder = await crud.save("orders", idOrder, edit);
                         return editOrder;
@@ -76,10 +67,6 @@ async function editarOrders(idOrder, order) {
         error: "0003",
         message: "Não foi encontrado esse Pedido!"
     }
-
-
-
-    return await crud.save("orders", id);
 };
 
 async function buscarOrders() {

@@ -3,9 +3,7 @@ const router = express.Router();
 const orderProducts = require("./orderProducts.handller")
 
 router.post("/", async (req, res) => {
-    console.log("ok");
     const ordersProducts = req.body;
-    console.log("ok");
     res.json(await orderProducts.cadastrarOrderProducts(ordersProducts));
 });
 
@@ -19,7 +17,8 @@ router.get("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    const id = req.params.id;
-    res.json(await orderProducts.deletarOrderProducts(id));
+    const idOrderProducts = req.params.id;
+    const orderProducts = req.body;
+    res.json(await orderProducts.deletarOrderProducts(idOrderProducts, orderProducts));
 });
 module.exports = router;
