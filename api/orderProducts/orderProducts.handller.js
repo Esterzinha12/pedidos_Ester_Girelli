@@ -8,22 +8,30 @@ async function cadastrarOrderProducts(ordersProducts) {
     const Orderid = ordersProducts.OrderId;
     const products = await buscarProducts();
     const Productid = ordersProducts.ProductId;
+    const listOrderProducts = await buscarOrderProducts();
 
-    for (let idOrder of orders) {
-        if (Orderid === idOrder.id) {
-            for (let idProduct of products) {
-                if (Productid === idProduct.id) {
-                    if (idOrder.Status != 'aberto') {
-                        return {
-                            error: "0002",
-                            message: "Não foi possivel fazer outro pedido... Outro pedido está em aberto!"
+
+    for (let order of orders) {
+        if (order.id === Orderid) {
+            for (let product of products) {
+                if (product.id === Productid) {
+                    if (order.status == "aberto") {
+                        for (let orderExist of listOrderProducts) {
+                            if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
+                                const newOrderProduct = {
+                                    ProductId: orderExist.ProductId,
+                                    Quantity: ordersProducts.Quantity + orderExist.Quantity,
+                                    OrderId: orderExist.id
+                                };
+                                return await crud.save('orderProducts', orderExist.id, newOrderProduct);
+                            }
                         }
-                    } else {
-                        return await crud.save("orderProducts", undefined, ordersProducts);
                     }
+                    return await crud.save('orderProducts', undefined, ordersProducts);
                 }
             }
         }
+
     }
     return {
         error: "0003",
