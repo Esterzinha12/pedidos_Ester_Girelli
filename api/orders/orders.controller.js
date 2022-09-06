@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const orders = require("./orders.handller");
+const editOrder = require("./editOrder.handller");
+
 
 
 router.get("/", async (req, res) => {
@@ -22,7 +24,11 @@ router.delete("/:id", async (req, res) => {
     res.json(await orders.deletarOrders(id));
 });
 
-
+router.put("/:id", async (req, res) => {
+    const idOrderProducts = req.params.id;
+    const orderProducts = req.body;
+    res.json(await editOrder.editarOrders(idOrderProducts, orderProducts));
+});
 
 
 module.exports = router;

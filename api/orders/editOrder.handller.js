@@ -10,7 +10,9 @@ async function editarOrders(idOrder, order) {
     for (let idOrders of listaorders) {
         if (idOrder === idOrders.id) {
             for (let idOrderProducts of listaOrderProducts) {
-                if (idOrderProducts.OrderId == idOrder) {
+                if (idOrderProducts.OrderId === idOrder) {
+                    console.log(idOrderProducts.OrderId);
+                    console.log(idOrder);
                     if (idOrders.Status == 'aberto') {
                         const edit = {
                             Number: order.Number,
@@ -19,16 +21,11 @@ async function editarOrders(idOrder, order) {
                         }
                         const editOrder = await crud.save("orders", idOrder, edit);
                         return editOrder;
-                    }else{
+                    } else {
                         return {
                             error: "0005",
                             message: "Esse pedido não esta aberto!"
                         }
-                    }
-                } else {
-                    return {
-                        error: "0006",
-                        message: "Não há produtos nesse pedido!"
                     }
                 }
             }

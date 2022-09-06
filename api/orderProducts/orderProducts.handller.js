@@ -15,7 +15,7 @@ async function cadastrarOrderProducts(ordersProducts) {
         if (order.id === Orderid) {
             for (let product of products) {
                 if (product.id === Productid) {
-                    if (order.status == "aberto") {
+                    if (order.Status == "aberto") {
                         for (let orderExist of listOrderProducts) {
                             if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
                                 const newOrderProduct = {
@@ -40,25 +40,29 @@ async function cadastrarOrderProducts(ordersProducts) {
 
 };
 
-async function deletarOrderProducts(idOrderProducts, orderProducts) {
+async function deletarOrderProducts(idOrderProducts, ordersProducts) {
     const orders = await buscarOrders();
-    const Orderid = orderProducts.OrderId;
+    const Orderid = ordersProducts.OrderId;
     const products = await buscarProducts();
-    const Productid = orderProducts.ProductId;
+    const Productid = ordersProducts.ProductId;
+    const listOrderProducts = await buscarOrderProducts();
 
 
     for (let idOrder of orders) {
         if (Orderid === idOrder.id) {
             for (let idProduct of products) {
                 if (Productid === idProduct.id) {
-                    if (idOrder.Status != 'aberto') {
-                        return {
-                            error: "0002",
-                            message: "Não foi possivel fazer outro pedido... Outro pedido está em aberto!"
+                    if (idOrder.Status == "aberto") {
+                        for (let orderExist of listOrderProducts) {
+                            if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
+                                return {
+                                    error: "0002",
+                                    message: "Não foi possivel deletar esse pedido!"
+                                }
+                            }
                         }
-                    } else {
-                        return await crud.save("orderProducts", undefined, orderProducts);
-                    }
+                    } 
+                    return await crud.remove("orderProducts", undefined, ordersProducts);
                 }
             }
         }

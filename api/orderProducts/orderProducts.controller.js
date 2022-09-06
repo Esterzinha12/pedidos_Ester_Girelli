@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const orderProducts = require("./orderProducts.handller")
-const editOrderProducts = require("./editOrderProducts.handller")
 
 
 router.post("/", async (req, res) => {
@@ -20,13 +19,8 @@ router.get("/:id", async (req, res) => {
 
 router.delete("/:id", async (req, res) => {
     const idOrderProducts = req.params.id;
-    const orderProducts = req.body;
-    res.json(await orderProducts.deletarOrderProducts(idOrderProducts, orderProducts));
+    const orderProduct = req.body;
+    res.json(await orderProducts.deletarOrderProducts(idOrderProducts, orderProduct));
 });
 
-router.put("/:id", async (req, res) => {
-    const idOrderProducts = req.params.id;
-    const orderProducts = req.body;
-    res.json(await editOrderProducts.editarOrders(idOrderProducts, orderProducts));
-});
 module.exports = router;

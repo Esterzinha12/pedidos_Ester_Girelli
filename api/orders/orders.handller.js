@@ -7,19 +7,27 @@ async function cadastrarOrders(order) {
     const idUser = order.UserId;
     const orders = await buscarOrders();
 
+
     for (let idCliente of clientes) {
         if (idUser === idCliente.id) {
+            let orderNumber = 0;
             for (let idOrders of orders) {
                 if (idUser === idOrders.UserId) {
+                    orderNumber++;
                     if (idOrders.Status == 'aberto') {
                         return {
                             error: "0002",
                             message: "Não foi possivel fazer o pedido... Outro pedido está em aberto!"
                         }
                     }
-                } 
+                }
             }
-            const finalOrder = await crud.save("orders", undefined, order);
+            const novaOrdem = {
+                userId: order.UserId,
+                status: 'open',
+                number: orderNumber + 1
+            };
+            const finalOrder = await crud.save("orders", undefined, novaOrdem);
             return finalOrder;
         }
     }
