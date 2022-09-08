@@ -50,84 +50,41 @@ async function deletarOrderProducts(idOrderProducts, ordersProducts) {
         if (Orderid === idOrder.id) {
             if (idOrder.Status == "aberto") {
                 for (let orderExist of listOrderProducts) {
-                    if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
-                        return {
-                            error: "0002",
-                            message: "Não foi possivel deletar esse pedido!"
+                    if (orderExist.id === ordersProducts.id) {
+                        if (ordersProducts.quantity > orderExist.quantity) {
+                            const New = {
+                                ProductId: orderExist.id,
+
+                                Quantity: orderExist.Quantity - ordersProducts.Quantity,
+
+                                OrderId: orderExist.OrderId
+                            }
+                            return await crud.save('orderProducts', ordersProducts.id, New);
                         }
                     }
                 }
+                return await crud.remove("orderProducts", ordersProducts.id);
             }
-            return await crud.remove("orderProducts", undefined, ordersProducts);
-
+        }
+        return {
+            error: "0003",
+            message: "Não foi encontrado esse Pedido!"
         }
     }
-    return {
-        error: "0003",
-        message: "Não foi encontrado esse Pedido!"
-    }
+}
+
+async function buscarOrderProducts() {
+    return await crud.get("orderProducts");
 };
 
-const listOrders = await orderHandler.getOrders();
-
-const listOrderProducts = await getOrderProducts();
-
-let ref = false;
+async function buscarOrderProductsId(id) {
+    return await crud.getById("orderProducts", id);
+};
 
 
-
-for (let order of listOrders) {
-
-    if (order.status == 'open') {
-
-        for (let orderProducts of listOrderProducts) {
-
-            if (orderProducts.id === orderProduct.id) {
-
-                ref = true;
-
-                if (orderProducts.quantity > orderProduct.quantity) {
-
-                    const newOrderProduct = {
-
-                        productId: orderProducts.id,
-
-                        quantity: orderProducts.quantity - orderProduct.quantity,
-
-                        orderId: orderProducts.orderId
-
-                    }
-
-                    return await crud.save('orderProducts', orderProduct.id, newOrderProduct)
-
-                } else {
-
-                    return await crud.remove('orderProducts', orderProduct.id);
-
-                }
-
-            }
-
-        }
-
-    }
-
-    async function buscarOrderProducts() {
-        return await crud.get("orderProducts");
-    };
-
-    async function buscarOrderProductsId(id) {
-        return await crud.getById("orderProducts", id);
-    };
-
-
-
-
-
-
-    module.exports = {
-        buscarOrderProducts,
-        buscarOrderProductsId,
-        cadastrarOrderProducts,
-        deletarOrderProducts
-    }
+module.exports = {
+    buscarOrderProducts,
+    buscarOrderProductsId,
+    cadastrarOrderProducts,
+    deletarOrderProducts
+}
