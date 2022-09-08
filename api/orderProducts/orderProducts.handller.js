@@ -43,28 +43,23 @@ async function cadastrarOrderProducts(ordersProducts) {
 async function deletarOrderProducts(idOrderProducts, ordersProducts) {
     const orders = await buscarOrders();
     const Orderid = ordersProducts.OrderId;
-    const products = await buscarProducts();
-    const Productid = ordersProducts.ProductId;
     const listOrderProducts = await buscarOrderProducts();
 
 
     for (let idOrder of orders) {
         if (Orderid === idOrder.id) {
-            for (let idProduct of products) {
-                if (Productid === idProduct.id) {
-                    if (idOrder.Status == "aberto") {
-                        for (let orderExist of listOrderProducts) {
-                            if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
-                                return {
-                                    error: "0002",
-                                    message: "Não foi possivel deletar esse pedido!"
-                                }
-                            }
+            if (idOrder.Status == "aberto") {
+                for (let orderExist of listOrderProducts) {
+                    if (orderExist.ProductId === ordersProducts.ProductId && orderExist.OrderId === Orderid) {
+                        return {
+                            error: "0002",
+                            message: "Não foi possivel deletar esse pedido!"
                         }
-                    } 
-                    return await crud.remove("orderProducts", undefined, ordersProducts);
+                    }
                 }
             }
+            return await crud.remove("orderProducts", undefined, ordersProducts);
+
         }
     }
     return {
@@ -73,22 +68,66 @@ async function deletarOrderProducts(idOrderProducts, ordersProducts) {
     }
 };
 
-async function buscarOrderProducts() {
-    return await crud.get("orderProducts");
-};
+const listOrders = await orderHandler.getOrders();
 
-async function buscarOrderProductsId(id) {
-    return await crud.getById("orderProducts", id);
-};
+const listOrderProducts = await getOrderProducts();
+
+let ref = false;
 
 
 
+for (let order of listOrders) {
+
+    if (order.status == 'open') {
+
+        for (let orderProducts of listOrderProducts) {
+
+            if (orderProducts.id === orderProduct.id) {
+
+                ref = true;
+
+                if (orderProducts.quantity > orderProduct.quantity) {
+
+                    const newOrderProduct = {
+
+                        productId: orderProducts.id,
+
+                        quantity: orderProducts.quantity - orderProduct.quantity,
+
+                        orderId: orderProducts.orderId
+
+                    }
+
+                    return await crud.save('orderProducts', orderProduct.id, newOrderProduct)
+
+                } else {
+
+                    return await crud.remove('orderProducts', orderProduct.id);
+
+                }
+
+            }
+
+        }
+
+    }
+
+    async function buscarOrderProducts() {
+        return await crud.get("orderProducts");
+    };
+
+    async function buscarOrderProductsId(id) {
+        return await crud.getById("orderProducts", id);
+    };
 
 
 
-module.exports = {
-    buscarOrderProducts,
-    buscarOrderProductsId,
-    cadastrarOrderProducts,
-    deletarOrderProducts
-}
+
+
+
+    module.exports = {
+        buscarOrderProducts,
+        buscarOrderProductsId,
+        cadastrarOrderProducts,
+        deletarOrderProducts
+    }
