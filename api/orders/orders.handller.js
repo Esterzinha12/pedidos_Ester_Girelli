@@ -9,6 +9,7 @@ async function cadastrarOrders(order) {
 
 
     for (let idCliente of clientes) {
+        console.log(idCliente);
         if (idUser === idCliente.id) {
             let orderNumber = 0;
             for (let idOrders of orders) {
@@ -23,9 +24,9 @@ async function cadastrarOrders(order) {
                 }
             }
             const novaOrdem = {
-                userId: order.UserId,
-                status: 'open',
-                number: orderNumber + 1
+                UserId: order.UserId,
+                Status: 'aberto',
+                Number: orderNumber + 1
             };
             const finalOrder = await crud.save("orders", undefined, novaOrdem);
             return finalOrder;

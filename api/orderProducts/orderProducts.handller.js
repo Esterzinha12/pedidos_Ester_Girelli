@@ -40,36 +40,39 @@ async function cadastrarOrderProducts(ordersProducts) {
 
 };
 
-async function deletarOrderProducts(idOrderProducts, ordersProducts) {
+async function deletarOrderProducts(ordersProducts) {
     const orders = await buscarOrders();
-    const Orderid = ordersProducts.OrderId;
     const listOrderProducts = await buscarOrderProducts();
 
 
     for (let idOrder of orders) {
-        if (Orderid === idOrder.id) {
-            if (idOrder.Status == "aberto") {
-                for (let orderExist of listOrderProducts) {
-                    if (orderExist.id === ordersProducts.id) {
-                        if (ordersProducts.quantity > orderExist.quantity) {
-                            const New = {
-                                ProductId: orderExist.id,
-
-                                Quantity: orderExist.Quantity - ordersProducts.Quantity,
-
-                                OrderId: orderExist.OrderId
-                            }
-                            return await crud.save('orderProducts', ordersProducts.id, New);
+        // console.log(idOrder);
+        if (idOrder.status == "open") {
+            // console.log(idOrder);
+            // console.log(idOrder.Status);
+            for (let orderExist of listOrderProducts) {
+                // console.log(orderExist);
+                // console.log(ordersProducts);
+                if (orderExist.id === ordersProducts.id) {
+                    // console.log(orderExist.id);
+                    // console.log(ordersProducts.id);
+                    if (ordersProducts.quantity > orderExist.quantity) {
+                        const New = {
+                            ProductId: orderExist.id,
+                            Quantity: orderExist.Quantity - ordersProducts.Quantity,
+                            OrderId: orderExist.OrderId
                         }
+                        return await crud.save('orderProducts', ordersProducts.id, New);
+                    } else {
+                        return await crud.remove("orderProducts", ordersProducts.id);
                     }
                 }
-                return await crud.remove("orderProducts", ordersProducts.id);
             }
         }
-        return {
-            error: "0003",
-            message: "Não foi encontrado esse Pedido!"
-        }
+    }
+    return {
+        error: "0003",
+        message: "Não foi encontrado esse Pedido!"
     }
 }
 
