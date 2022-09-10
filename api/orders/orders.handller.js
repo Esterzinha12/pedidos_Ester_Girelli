@@ -9,13 +9,12 @@ async function cadastrarOrders(order) {
 
 
     for (let idCliente of clientes) {
-        console.log(idCliente);
         if (idUser === idCliente.id) {
             let orderNumber = 0;
             for (let idOrders of orders) {
                 if (idUser === idOrders.UserId) {
                     orderNumber++;
-                    if (idOrders.Status == 'aberto') {
+                    if (idOrders.Status == "aberto") {
                         return {
                             error: "0002",
                             message: "Não foi possivel fazer o pedido... Outro pedido está em aberto!"
@@ -25,7 +24,7 @@ async function cadastrarOrders(order) {
             }
             const novaOrdem = {
                 UserId: order.UserId,
-                Status: 'aberto',
+                Status: "aberto",
                 Number: orderNumber + 1
             };
             const finalOrder = await crud.save("orders", undefined, novaOrdem);

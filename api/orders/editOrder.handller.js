@@ -2,21 +2,24 @@ const crud = require("../../crud");
 const { buscarOrderProducts } = require('../orderProducts/orderProducts.handller');
 const { buscarOrders } = require('../orders/orders.handller');
 
-async function editarOrders(idOrder, order) {
+async function editarOrders(idOrder) {
     const listaorders = await buscarOrders();
     const listaOrderProducts = await buscarOrderProducts();
-
-    console.log(idOrder);
+    console.log(listaorders);
     for (let idOrders of listaorders) {
+        console.log(idOrders);
+        console.log("separa");
         if (idOrder === idOrders.id) {
             for (let idOrderProducts of listaOrderProducts) {
+                console.log("oiiiiiiiii", idOrderProducts);
+                console.log("toma",idOrder);
                 if (idOrderProducts.OrderId === idOrder) {
                     console.log(idOrderProducts.OrderId);
                     console.log(idOrder);
-                    if (idOrders.Status == 'aberto') {
+                    if (idOrders.Status == "aberto") {
                         const edit = {
-                            Number: order.Number,
-                            UserId: order.UserId,
+                            Number: idOrders.Number,
+                            UserId: idOrders.UserId,
                             Status: "fechado"
                         }
                         const editOrder = await crud.save("orders", idOrder, edit);

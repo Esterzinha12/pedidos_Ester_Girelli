@@ -1,6 +1,7 @@
 const crud = require("../../crud");
 const { buscarProducts } = require('../products/products.handller');
-const { buscarOrders } = require('../orders/orders.handller');
+const { buscarOrders, buscarOrdersId } = require('../orders/orders.handller');
+const { stringify } = require("@firebase/util");
 
 async function cadastrarOrderProducts(ordersProducts) {
 
@@ -21,7 +22,7 @@ async function cadastrarOrderProducts(ordersProducts) {
                                 const newOrderProduct = {
                                     ProductId: orderExist.ProductId,
                                     Quantity: ordersProducts.Quantity + orderExist.Quantity,
-                                    OrderId: orderExist.id
+                                    OrderId: orderExist.OrderId
                                 };
                                 return await crud.save('orderProducts', orderExist.id, newOrderProduct);
                             }
@@ -40,31 +41,23 @@ async function cadastrarOrderProducts(ordersProducts) {
 
 };
 
-async function deletarOrderProducts(ordersProducts) {
+async function deletarOrderProducts(orderId, bodyDeletar) {
     const orders = await buscarOrders();
     const listOrderProducts = await buscarOrderProducts();
 
-
-    for (let idOrder of orders) {
-        // console.log(idOrder);
-        if (idOrder.status == "open") {
-            // console.log(idOrder);
-            // console.log(idOrder.Status);
-            for (let orderExist of listOrderProducts) {
-                // console.log(orderExist);
-                // console.log(ordersProducts);
-                if (orderExist.id === ordersProducts.id) {
-                    // console.log(orderExist.id);
-                    // console.log(ordersProducts.id);
-                    if (ordersProducts.quantity > orderExist.quantity) {
-                        const New = {
-                            ProductId: orderExist.id,
-                            Quantity: orderExist.Quantity - ordersProducts.Quantity,
-                            OrderId: orderExist.OrderId
+    for (let order of orders) {
+        if (order.Status === "aberto") {
+            for (let orderProduct of listOrderProducts) {
+                if (order.id === orderProduct.OrderId && orderProduct.ProductId === bodyDeletar.ProductId) {
+                    if (orderProduct.Quantity > bodyDeletar.Quantity) {
+                        const newOrderProduct = {
+                            ProductId: bodyDeletar.ProductId,
+                            Quantity: orderProduct.Quantity - bodyDeletar.Quantity,
+                            OrderId: bodyDeletar.OrderId
                         }
-                        return await crud.save('orderProducts', ordersProducts.id, New);
+                        return await crud.save('orderProducts', orderProduct.id, newOrderProduct);
                     } else {
-                        return await crud.remove("orderProducts", ordersProducts.id);
+                        return await crud.remove("orderProducts", orderProduct.id);
                     }
                 }
             }

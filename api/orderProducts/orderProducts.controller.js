@@ -18,8 +18,9 @@ router.get("/:id", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-    const orderProduct = req.body;
-    res.json(await orderProducts.deletarOrderProducts(orderProduct));
+    const orderId = req.params.id;
+    const body = req.body;
+    res.json(await orderProducts.deletarOrderProducts(orderId, body));
 });
 
 module.exports = router;

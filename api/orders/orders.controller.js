@@ -26,8 +26,7 @@ router.delete("/:id", async (req, res) => {
 
 router.put("/:id", async (req, res) => {
     const idOrderProducts = req.params.id;
-    const orderProducts = req.body;
-    res.json(await editOrder.editarOrders(idOrderProducts, orderProducts));
+    res.json(await editOrder.editarOrders(idOrderProducts));
 });
 
 
