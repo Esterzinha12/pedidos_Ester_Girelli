@@ -12,8 +12,8 @@ async function cadastrarOrders(order) {
         if (idUser === idCliente.id) {
             let orderNumber = 0;
             for (let idOrders of orders) {
+                orderNumber++;
                 if (idUser === idOrders.UserId) {
-                    orderNumber++;
                     if (idOrders.Status == "aberto") {
                         return {
                             error: "0002",
